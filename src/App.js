@@ -1,24 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from "react-router-dom";
+import Login from "./pages/Login";
+import ProtectedRoutes from './pages/ProtectedRoutes'
+import Game from './pages/Game'
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:3001");
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <Routes>
+        <Route path="/login" element={<Login socket={socket} />} />
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/" element={<Game socket={socket} />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
 

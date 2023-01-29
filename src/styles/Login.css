@@ -1,0 +1,48 @@
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  height: 100vh;
+}
+
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  gap: 20px;
+  padding: 20px;
+  width: 30%;
+}
+
+.form-button {
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 20px;
+  background-color: rgb(174, 0, 255);
+  color: white;
+  transition: 0.2s ease all;
+}
+
+.form-button:hover {
+  background-color: rgb(179, 74, 228);
+}
+
+.form-button:active {
+  background-color: rgb(103, 13, 145);
+}
+
+input {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 10px;
+  padding-left: 10px;
+  outline: none;
+  font-size: 18px;
+}
