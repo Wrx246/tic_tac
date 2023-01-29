@@ -9,8 +9,6 @@ const Game = ({ socket }) => {
   const [cells, setCells] = useState(Array(9).fill(""));
   const [winner, setWinner] = useState(null);
   const [step, setStep] = useState(true);
-  const [disableX, setDisableX] = useState(false);
-  const [disableO, setDisableO] = useState(false);
   const [opponent, setOpponent] = useState("");
 
   const name = localStorage.getItem("game-name");
@@ -48,6 +46,12 @@ const Game = ({ socket }) => {
     }
   }, [socket, cells]);
 
+  useEffect(() => {
+    socket.on("leave_opponent", (data) => {
+      alert(data);
+    });
+  }, [socket]);
+
   const checkForWinner = (squares) => {
     let combos = {
       across: [
@@ -80,7 +84,7 @@ const Game = ({ socket }) => {
         ) {
           setWinner(squares[pattern[0]]);
           socket.emit("winner", {
-            winner: squares[pattern[0]] + 'is the winner!',
+            winner: squares[pattern[0]] + "is the winner!",
             room: JSON.parse(localStorage.getItem("game-room")),
           });
         }
@@ -133,38 +137,35 @@ const Game = ({ socket }) => {
     navigate("/login");
   };
 
-  const playX = (e) => {
+  const handleMark = ( e, mark ) => {
     e.preventDefault();
-    setTurn("X");
-    setDisableO(true);
-  };
-
-  const playO = (e) => {
-    e.preventDefault();
-    setTurn("O");
-    setDisableX(true);
+    setTurn(mark);
   };
 
   return (
     <div className="container">
-        <h2 style={{ color: "white" }}>You playing against {opponent}</h2>
+      <h2 style={{ color: "white" }}>
+        {opponent.length
+          ? `You playing against ${opponent}`
+          : "Waiting for your opponent"}
+      </h2>
       <h3 className="container-title">Turn: {!step ? opponent : name}</h3>
-      <div className="button-bar">
-        <button
-          className="button button-reload"
-          disabled={disableX}
-          onClick={playX}
-        >
-          Play X
-        </button>
-        <button
-          className="button button-reload"
-          disabled={disableO}
-          onClick={playO}
-        >
-          Play O
-        </button>
-      </div>
+      {!turn.length && (
+        <div className="button-bar">
+          <button
+            className="button button-reload"
+            onClick={(e) => handleMark(e, "X")}
+          >
+            Play X
+          </button>
+          <button
+            className="button button-reload"
+            onClick={(e) => handleMark(e, "O")}
+          >
+            Play O
+          </button>
+        </div>
+      )}
       <table>
         <tbody>
           <tr>
