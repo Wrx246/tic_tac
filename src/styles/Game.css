@@ -1,81 +1,90 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
-  
-  .container-title {
-    color: white;
-    font-size: 30px;
-  }
-  
-  table td {
-    border: 1px solid grey;
-    width: 100px;
-    height: 100px;
-    color: white;
-    font-weight: 600;
-    font-size: 50px;
-  }
-  
-  .cell {
-    cursor: pointer;
-    transition: 0.2s all ease;
-  }
-  
-  .cell span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .cell:hover {
-    background-color: white;
-    color: black;
-  }
-  
-  .button {
-    height: 40px;
-    border: none;
-    border-radius: 10px;
-    padding: 0px 10px;
-    margin: 10px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 20px;
-    color: white;
-    transition: 0.2s ease all;
-  }
-  
-  .button-leave {
-    background-color: rgb(165, 6, 6);
-  }
-  
-  .button-leave:hover {
-    background-color: rgb(255, 0, 0);
-  }
-  
-  .button-leave:active {
-    background-color: rgb(117, 0, 0);
-  }
-  
-  .button-reload {
-    background-color: rgb(174, 0, 255);
-  }
-  
-  .button-reload:hover {
-    background-color: rgb(179, 74, 228);
-  }
-  
-  .button-reload:active {
-    background-color: rgb(103, 13, 145);
-  }
-  
-  .container-winner {
-    color: white;
-    margin: 25px;
-    font-size: 25px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.container-title {
+  color: white;
+  font-size: 30px;
+}
+
+table td {
+  border: 1px solid grey;
+  width: 100px;
+  height: 100px;
+  color: white;
+  font-weight: 600;
+  font-size: 50px;
+}
+
+.cell {
+  cursor: pointer;
+  transition: 0.2s all ease;
+}
+
+.cell span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cell:hover {
+  background-color: white;
+  color: black;
+}
+
+.button {
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  padding: 0px 10px;
+  margin: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 20px;
+  color: white;
+  transition: 0.2s ease all;
+}
+
+.button:disabled{
+  background-color: gray;
+  cursor: not-allowed;
+}
+
+.button-leave {
+  background-color: rgb(165, 6, 6);
+}
+
+.button-leave:hover {
+  background-color: rgb(255, 0, 0);
+}
+
+.button-leave:active {
+  background-color: rgb(117, 0, 0);
+}
+
+.button-reload {
+  background-color: rgb(174, 0, 255);
+}
+
+.button-reload:hover {
+  background-color: rgb(179, 74, 228);
+}
+
+.button-reload:active {
+  background-color: rgb(103, 13, 145);
+}
+
+.container-winner {
+  color: white;
+  margin: 25px;
+  font-size: 25px;
+}
+
+.button-bar {
+  display: flex;
+  flex-direction: row;
+}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cell from "../components/Cell";
 import "../styles/Game.css";
@@ -11,35 +11,42 @@ const Game = ({ socket }) => {
   const [step, setStep] = useState(true);
   const [disableX, setDisableX] = useState(false);
   const [disableO, setDisableO] = useState(false);
+  const [opponent, setOpponent] = useState("");
+
+  const name = localStorage.getItem("game-name");
 
   useEffect(() => {
     socket.on("confirm_restart", (data) => {
       setCells(data.cells);
+      setWinner(data.winner);
     });
   }, [socket]);
 
   useEffect(() => {
     socket.on("receive_step", (data) => {
-      console.log(data);
-      if(data.name !== localStorage.getItem("game-name")) {
+      if (data.name !== name) {
         setStep(true);
+        setOpponent(data.name);
       }
-      // if (data.cells.join("").length > cells.join("")) {
-        setCells(data.cells);
-      // }
+      setCells(data.cells);
     });
     return () => socket.off("receive_step");
-  }, []);
+  }, [socket]);
 
-  // useEffect(() => {
-  //   socket.emit("send_step", {
-  //     cells: cells,
-  //     room: JSON.parse(localStorage.getItem("game-room")),
-  //     name: localStorage.getItem("game-name"),
-  //     step: step,
-  //     turn: false,
-  //   });
-  // }, [socket, cells, step, turn]);
+  useEffect(() => {
+    socket.on("winner_emit", (data) => {
+      setWinner(data.winner);
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    if (cells.join("").length === 9) {
+      socket.emit("winner", {
+        winner: "draw",
+        room: JSON.parse(localStorage.getItem("game-room")),
+      });
+    }
+  }, [socket, cells]);
 
   const checkForWinner = (squares) => {
     let combos = {
@@ -66,12 +73,16 @@ const Game = ({ socket }) => {
           squares[pattern[1]] === "" ||
           squares[pattern[2]] === ""
         ) {
-          // do nothing
+          //
         } else if (
           squares[pattern[0]] === squares[pattern[1]] &&
           squares[pattern[1]] === squares[pattern[2]]
         ) {
           setWinner(squares[pattern[0]]);
+          socket.emit("winner", {
+            winner: squares[pattern[0]] + 'is the winner!',
+            room: JSON.parse(localStorage.getItem("game-room")),
+          });
         }
       });
     }
@@ -95,7 +106,7 @@ const Game = ({ socket }) => {
     await socket.emit("send_step", {
       cells: squares,
       room: JSON.parse(localStorage.getItem("game-room")),
-      name: localStorage.getItem("game-name"),
+      name: name,
       step: false,
       turn: turn,
     });
@@ -136,21 +147,24 @@ const Game = ({ socket }) => {
 
   return (
     <div className="container">
-      <h2 className="container-title">Turn: {turn}</h2>
-      <button
-        className="button button-reload"
-        disabled={disableX}
-        onClick={playX}
-      >
-        Play X
-      </button>
-      <button
-        className="button button-reload"
-        disabled={disableO}
-        onClick={playO}
-      >
-        Play O
-      </button>
+        <h2 style={{ color: "white" }}>You playing against {opponent}</h2>
+      <h3 className="container-title">Turn: {!step ? opponent : name}</h3>
+      <div className="button-bar">
+        <button
+          className="button button-reload"
+          disabled={disableX}
+          onClick={playX}
+        >
+          Play X
+        </button>
+        <button
+          className="button button-reload"
+          disabled={disableO}
+          onClick={playO}
+        >
+          Play O
+        </button>
+      </div>
       <table>
         <tbody>
           <tr>
@@ -172,7 +186,7 @@ const Game = ({ socket }) => {
       </table>
       {winner && (
         <>
-          <p className="container-winner">{winner} is the winner!</p>
+          <p className="container-winner">{winner}</p>
           <button className="button button-reload" onClick={handleRestart}>
             Play Again
           </button>
