@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 
-const Login = ({socket}) => {
+const Login = ({ socket }) => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [room, setRoom] = useState("");
@@ -12,9 +12,7 @@ const Login = ({socket}) => {
     socket.on("getUsers", (users) => {
       setUsers(users);
     });
-  }, []);
-
-  // const storage = JSON.parse(localStorage.getItem('game-name') || '')
+  }, [socket]);
 
   useEffect(() => {
     if (users.length) {
@@ -30,11 +28,11 @@ const Login = ({socket}) => {
     setName(e.target.value);
   };
 
-  const submitData = (e) => {
+  const submitData = async (e) => {
     e.preventDefault();
     if (room !== "" && name !== "") {
-      socket.emit("join_room", room);
-      socket.emit("addUser", name);
+      await socket.emit("join_room", room);
+      await socket.emit("addUser", name);
       localStorage.setItem("game-name", name);
       localStorage.setItem("game-room", room);
     }
