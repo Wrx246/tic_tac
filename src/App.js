@@ -4,7 +4,7 @@ import ProtectedRoutes from './pages/ProtectedRoutes'
 import Game from './pages/Game'
 import { io } from "socket.io-client";
 
-const socket = io(process.env.REACT_APP_API_URL);
+const socket = io('https://tic-tac-back.onrender.com');
 
 function App() {
   return (
